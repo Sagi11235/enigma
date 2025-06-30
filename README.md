@@ -22,17 +22,27 @@ class board:
         return code
  
 class rotor(board):
-    position=0
-    
-    def letter_return(self, number):
-        return chr(ord(self.order[number-1])+self.position)
-        
+
     def encode(self, text):
         code=list("a"*len(text))
         for i in range(len(text)):
-            code[i]=self.letter_return(get_letter_position(text[i])-self.position)
+            code[i]=self.letter_return(get_letter_position(text[i]))
+            self.rotate()
         return code
-
+        
+    def rotate(self):
+        first_letter=self.order[0]
+        remaining=self.order[1:]
+        self.order=remaining+first_letter
+        text=[]
+        for letter in self.order:
+            if letter == 'a':
+                new_letter ='z'
+            else:
+                new_letter=chr(ord(letter)-1)
+            text.append(new_letter)
+        self.order="".join(text)
+ 
 def get_letter_position(letter):
   if not letter.isalpha() or not letter.islower():
     return "Invalid input: not a lowercase letter"
