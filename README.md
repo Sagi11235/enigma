@@ -22,12 +22,26 @@ class board:
         return code
  
 class rotor(board):
+    counter=0
+    position=0
 
+    def __init__(self,num):
+        self.rotor_num=num
+        
     def encode(self, text):
         code=list("a"*len(text))
         for i in range(len(text)):
             code[i]=self.letter_return(get_letter_position(text[i]))
-            self.rotate()
+            self.counter=self.counter+1
+            if self.rotor_num>1:
+                if self.counter%(26^(self.rotor_num-1))==0:
+                    self.counter=0
+                    self.position=self.position+1
+                    self.rotate()
+            else:
+                self.counter=self.counter%26
+                self.position=self.position+1
+                self.rotate()
         return code
         
     def rotate(self):
@@ -42,7 +56,7 @@ class rotor(board):
                 new_letter=chr(ord(letter)-1)
             text.append(new_letter)
         self.order="".join(text)
- 
+
 def get_letter_position(letter):
   if not letter.isalpha() or not letter.islower():
     return "Invalid input: not a lowercase letter"
@@ -53,12 +67,18 @@ num=int(input("how many pairs of letters do you want to swap on the switchboard:
 for i in range(num):
     switchboard.letter_change()
 
-rotor1=rotor()
-num=int(input("how many pairs of letters do you want to swap on the rotor: "))
+rotor1=rotor(1)
+num=int(input("how many pairs of letters do you want to swap on rotor number 1: "))
 for i in range(num):
     rotor1.letter_change()
+    
+rotor2=rotor(2)
+num=int(input("how many pairs of letters do you want to swap on rotor number 2: "))
+for i in range(num):
+    rotor2.letter_change()
 
 text=input("enter text to encode in lower case: ")
 code=switchboard.encode(text)
 code=rotor1.encode(code)
+code=rotor2.encode(code)
 print("".join([str(x) for x in code]))
