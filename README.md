@@ -63,22 +63,23 @@ def get_letter_position(letter):
   return ord(letter) - 96
   
 switchboard=board()
-num=int(input("how many pairs of letters do you want to swap on the switchboard: "))
+num=int(input("How many pairs of letters do you want to swap on the switchboard: "))
 for i in range(num):
     switchboard.letter_change()
 
-rotor1=rotor(1)
-num=int(input("how many pairs of letters do you want to swap on rotor number 1: "))
-for i in range(num):
-    rotor1.letter_change()
-    
-rotor2=rotor(2)
-num=int(input("how many pairs of letters do you want to swap on rotor number 2: "))
-for i in range(num):
-    rotor2.letter_change()
+rotors=int(input("How many rotors do you want?"))
+rotor_arr=list("a"*rotors)
 
-text=input("enter text to encode in lower case: ")
+for j in range(rotors):
+    rotor_arr[j-1]=rotor(j)
+    print("How many pairs of letters do you want to swap on rotor number" , j+1 ,": ")
+    num=int(input())
+    for i in range(num):
+        rotor_arr[j-1].letter_change()
+    
+text=input("Enter text to encode in lower case: ")
 code=switchboard.encode(text)
-code=rotor1.encode(code)
-code=rotor2.encode(code)
+for j in range(rotors):
+    code=rotor_arr[j-1].encode(code)
+
 print("".join([str(x) for x in code]))
