@@ -76,10 +76,16 @@ for j in range(rotors):
     num=int(input())
     for i in range(num):
         rotor_arr[j-1].letter_change()
+
+reflector=board()
+num=int(input("How many pairs of letters do you want to swap on the reflector: "))
+for i in range(num):
+    reflector.letter_change()
     
-text=input("Enter text to encode in lower case: ")
-code=switchboard.encode(text)
+code=input("Enter text to encode in lower case: ")
+code=switchboard.encode(code)
 for j in range(rotors):
     code=rotor_arr[j-1].encode(code)
+code=reflector.encode(code)
 
 print("".join([str(x) for x in code]))
