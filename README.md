@@ -2,6 +2,8 @@
 python code for enfrypting massage using the enigma machine method from WW2
 
 import string
+import copy
+
 class board:
     order='abcdefghijklmnopqrstuvwxyz'
    
@@ -50,6 +52,22 @@ class rotor(board):
                 self.rotate()
         return code
         
+    def rencode(self, text):
+        code=list("a"*len(text))
+        for i in range(len(text)):
+            code[i]=chr(97+(self.order.find(text[i])))
+            self.counter=self.counter+1
+            if self.rotor_num>1:
+                if self.counter%(26^(self.rotor_num-1))==0:
+                    self.counter=0
+                    self.position=self.position+1
+                    self.rotate()
+            else:
+                self.counter=self.counter%26
+                self.position=self.position+1
+                self.rotate()
+        return code
+        
     def rotate(self):
         first_letter=self.order[0]
         remaining=self.order[1:]
@@ -85,6 +103,7 @@ for j in range(rotors):
 
 d=input("Do you want a reflector? Y/N: ")
 if d=='Y':
+    rotor_copy=copy.deepcopy(rotor_arr)
     reflector=board()
     num=int(input("How many pairs of letters do you want to swap on the reflector: "))
     for i in range(num):
@@ -96,6 +115,8 @@ for j in range(rotors):
     code=rotor_arr[j-1].encode(code)
 if d=='Y':
     code=reflector.encode(code)
+    for j in range(rotors):
+        code=rotor_copy[len(rotor_arr)-j-1].rencode(code)
     code=switchboard.rencode(code)
 
 print("".join([str(x) for x in code]))
