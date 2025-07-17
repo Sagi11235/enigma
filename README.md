@@ -6,10 +6,7 @@ import copy
 
 class board:
     order='abcdefghijklmnopqrstuvwxyz'
-   
-    def letter_return(self, number):
-        return self.order[number-1]
-    
+
     def letter_change(self):
         chosen_pos1=int(input("enter first position: "))-1
         chosen_pos2=int(input("enter second position: "))-1
@@ -20,7 +17,7 @@ class board:
     def encode(self, text):
         code=list("a"*len(text))
         for i in range(len(text)):
-            code[i]=self.letter_return(get_letter_position(text[i]))
+            code[i]=self.order[ord(text[i])-97]
         return code
         
     def rencode(self, text):
@@ -39,7 +36,7 @@ class rotor(board):
     def encode(self, text):
         code=list("a"*len(text))
         for i in range(len(text)):
-            code[i]=self.letter_return(get_letter_position(text[i]))
+            code[i]=self.order[ord(text[i])-97]
             self.counter=self.counter+1
             if self.rotor_num>1:
                 if self.counter%(26^(self.rotor_num-1))==0:
@@ -81,11 +78,6 @@ class rotor(board):
             text.append(new_letter)
         self.order="".join(text)
 
-def get_letter_position(letter):
-  if not letter.isalpha() or not letter.islower():
-    return "Invalid input: not a lowercase letter"
-  return ord(letter) - 96
-  
 switchboard=board()
 num=int(input("How many pairs of letters do you want to swap on the switchboard: "))
 for i in range(num):
