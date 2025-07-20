@@ -101,7 +101,9 @@ if d=='Y':
     for i in range(num):
         reflector.letter_change()
     
-code=input("Enter text to encode in lower case: ")
+code=input("Enter text to encrypt: ")
+code=code.lower()
+code=code.replace(' ','')
 code=switchboard.encode(code)
 for j in range(rotors):
     code=rotor_arr[j-1].encode(code)
